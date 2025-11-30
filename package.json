@@ -1,7 +1,7 @@
 {
   "name": "debugtron-tauri",
   "productName": "Debugtron",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Debug in-production Electron based App - Tauri Edition",
   "repository": {
     "type": "git",

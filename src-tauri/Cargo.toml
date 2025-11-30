@@ -1,6 +1,6 @@
 [package]
 name = "debugtron-tauri"
-version = "1.0.2"
+version = "1.0.3"
 description = "Debug in-production Electron based App - Tauri Edition"
 authors = ["Rongjian Zhang <pd4d10@gmail.com>"]
 license = "MIT"
