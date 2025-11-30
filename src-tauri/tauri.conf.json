@@ -1,0 +1,102 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:10420",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "package": {
+    "productName": "Debugtron",
+    "version": "1.0.2"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "window": {
+        "all": false,
+        "close": true,
+        "hide": true,
+        "show": true,
+        "maximize": true,
+        "minimize": true,
+        "unmaximize": true,
+        "unminimize": true,
+        "startDragging": true,
+        "create": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": true,
+        "confirm": true,
+        "message": true,
+        "open": true,
+        "save": true
+      },
+      "http": {
+        "all": true,
+        "request": true,
+        "scope": [
+          "http://**"
+        ]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.debugtron.app",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": [
+        "resources/devtools-frontend.zip"
+      ]
+    },
+    "security": {
+      "csp": null,
+      "dangerousRemoteDomainIpcAccess": [
+        {
+          "domain": "127.0.0.1",
+          "windows": [
+            "*"
+          ],
+          "enableTauriAPI": true
+        },
+        {
+          "domain": "localhost",
+          "windows": [
+            "*"
+          ],
+          "enableTauriAPI": true
+        }
+      ],
+      "dangerousDisableAssetCspModification": [
+        "script-src",
+        "style-src"
+      ]
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Debugtron",
+        "width": 1024,
+        "height": 768,
+        "decorations": true,
+        "titleBarStyle": "Transparent",
+        "url": "index.html"
+      }
+    ],
+    "pattern": {
+      "use": "brownfield"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@source "../**/*.{ts,tsx}";
+
+/* Define color variables directly on :root for light mode */
+:root {
+  --color-background: #ffffff;
+  --color-foreground: #0f172a;
+  --color-muted: #f1f5f9;
+  --color-muted-foreground: #64748b;
+  --color-primary: #3b82f6;
+  --color-primary-foreground: #f8fafc;
+  --color-secondary: #f1f5f9;
+  --color-secondary-foreground: #1e293b;
+  --color-accent: #f1f5f9;
+  --color-accent-foreground: #1e293b;
+  --color-border: #e2e8f0;
+  --color-input: #e2e8f0;
+  --color-ring: #3b82f6;
+
+  /* Scrollbar colors */
+  --scrollbar-track: #f5f8fa;
+  --scrollbar-thumb: #d8e1e8;
+  --scrollbar-thumb-hover: #c1ccd6;
+}
+
+/* Override for dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #0f172a;
+    --color-foreground: #f8fafc;
+    --color-muted: #1e293b;
+    --color-muted-foreground: #94a3b8;
+    --color-primary: #3b82f6;
+    --color-primary-foreground: #1e293b;
+    --color-secondary: #1e293b;
+    --color-secondary-foreground: #f8fafc;
+    --color-accent: #1e293b;
+    --color-accent-foreground: #f8fafc;
+    --color-border: #1e293b;
+    --color-input: #1e293b;
+    --color-ring: #3b82f6;
+
+    /* Scrollbar colors */
+    --scrollbar-track: #30404d;
+    --scrollbar-thumb: #5c7080;
+    --scrollbar-thumb-hover: #738694;
+  }
+}
+
+/* Tell Tailwind to use our custom color variables */
+@theme {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-muted: var(--color-muted);
+  --color-muted-foreground: var(--color-muted-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-accent-foreground);
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-ring: var(--color-ring);
+}
+
+html,
+body,
+#root {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}

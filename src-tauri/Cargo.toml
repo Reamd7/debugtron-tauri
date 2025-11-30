@@ -1,0 +1,66 @@
+[package]
+name = "debugtron-tauri"
+version = "1.0.2"
+description = "Debug in-production Electron based App - Tauri Edition"
+authors = ["Rongjian Zhang <pd4d10@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/pd4d10/debugtron"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.6", features = [
+    "shell-open",
+    "window-close",
+    "window-hide",
+    "window-show",
+    "window-maximize",
+    "window-minimize",
+    "window-unmaximize",
+    "window-unminimize",
+    "window-start-dragging",
+    "window-create",
+    "dialog-ask",
+    "dialog-confirm",
+    "dialog-message",
+    "dialog-open",
+    "dialog-save",
+    "http-all"
+] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+anyhow = "1.0"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+reqwest = { version = "0.12", features = ["json"] }
+async-trait = "0.1"
+portpicker = "0.1"
+dirs = "5.0"
+chrono = "0.4"
+opener = "0.7"
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["fs", "cors"] }
+zip = "2.1"
+
+# Platform-specific dependencies
+[target.'cfg(target_os = "macos")'.dependencies]
+plist = "1.5"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+winreg = "0.52"
+walkdir = "2"
+winapi = { version = "0.3", features = ["shellapi", "winuser", "wingdi", "winnt", "minwindef", "windef", "handleapi", "errhandlingapi", "libloaderapi"] }
+image = { version = "0.25", default-features = false, features = ["ico", "png"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+walkdir = "2"
+
+[features]
+# This feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]

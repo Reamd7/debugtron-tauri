@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(rustc:*)",
+      "Bash(cargo:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill -9)",
+      "Bash(pkill:*)",
+      "WebSearch",
+      "Bash(npx esbuild --version)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(git add:*)",
+      "Bash(gh release:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
