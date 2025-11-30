@@ -1085,14 +1085,16 @@ for i in "${!ARCHITECTURES[@]}"; do
   echo "📦 Packaging $ARCH_NAME .app bundle..."
   tar -czf "$APP_ARCHIVE" -C "$(dirname "$APP_PATH")" "$(basename "$APP_PATH")"
 
-  # 重命名 DMG（使用 # 语法为上传指定显示名称）
-  DMG_DISPLAY_NAME="Debugtron_${VERSION}_macOS_${ARCH_NAME}.dmg"
+  # 重命名 DMG 文件（直接复制为新文件名）
+  DMG_RENAMED="Debugtron_${VERSION}_macOS_${ARCH_NAME}.dmg"
+  echo "📝 Renaming DMG file..."
+  cp "$DMG_PATH" "$DMG_RENAMED"
 
   # 添加到上传参数
-  UPLOAD_ARGS="$UPLOAD_ARGS \"$DMG_PATH#$DMG_DISPLAY_NAME\" \"$APP_ARCHIVE\""
+  UPLOAD_ARGS="$UPLOAD_ARGS \"$DMG_RENAMED\" \"$APP_ARCHIVE\""
 
   echo "✅ $ARCH_NAME build complete"
-  echo "   DMG: $(basename "$DMG_PATH") → $DMG_DISPLAY_NAME"
+  echo "   DMG: $DMG_RENAMED"
   echo "   APP: $APP_ARCHIVE"
 done
 
@@ -1110,6 +1112,7 @@ fi
 echo ""
 echo "🧹 Cleaning up temporary files..."
 for ARCH_NAME in "${ARCH_NAMES[@]}"; do
+  rm -f "Debugtron_${VERSION}_macOS_${ARCH_NAME}.dmg"
   rm -f "Debugtron_${VERSION}_macOS_${ARCH_NAME}.app.tar.gz"
 done
 
