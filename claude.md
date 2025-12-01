@@ -282,6 +282,7 @@
   - **`01-cdp-capability-audit.md`**: CDP 能力审计（现有能力 vs 未利用功能）
   - **`02-competitive-analysis.md`**: 竞品分析（9 个工具对比，开发者痛点 Top 10）
   - **`03-workflow-collaboration.md`**: 工作流和协作（4 种典型场景，团队需求）
+  - **`04-architecture-implementation-plan.md`**: 功能分层架构与 12 周实施计划 ⭐⭐ 最新！
   - 调研涵盖：开发体验提升、深度调试能力、团队协作、生产环境调试
 
 ## 技术栈
@@ -333,6 +334,114 @@
 - `DevicePanel.tsx` - 应用列表
 - `Session.tsx` - 调试会话界面
 - `Xterm.tsx` - 终端组件
+
+## 功能分层架构与实施计划 ⭐⭐ 2025-12-01 最新
+
+> **完整文档**: `.claude/plan/04-architecture-implementation-plan.md`
+
+### 核心架构决策
+
+#### 1. 构建系统策略
+- **决策**: 暂不独立化，直接在现有 GN 构建系统上二次开发 DevTools Frontend
+- **路径**: `/Users/gemini/Documents/apifox/devtools-frontend/front_end`
+- **理由**: 降低初期复杂度，快速产出功能
+
+#### 2. 功能分层原则
+
+```
+需要界面的功能     → DevTools Frontend 实现 (60%)
+可纯 Rust 实现的   → Debugtron Tauri 实现 (30%)
+混合功能           → 分层协同 (10%)
+所有功能           → 设计为未来可通过 MCP 暴露给 AI
+```
+
+### 功能分层矩阵
+
+| 功能 | 实现层 | 技术方案 | 工作量 | MCP 工具 |
+|-----|-------|---------|-------|---------|
+| **日志搜索/导出** | Rust/Tauri | 后端索引 + Tauri Command | 2-3 天 | `search_logs`, `export_logs` |
+| **会话导出/导入** | Rust/Tauri | JSON Schema v1.0 序列化 | 2 天 | `export_session`, `import_session` |
+| **预设启动配置** | Rust/Tauri | 本地 JSON 文件存储 | 2 天 | `save_launch_config` |
+| **CDP WebSocket** | Rust/Tauri | `tokio-tungstenite` 客户端 | 3 天 | 基础设施 |
+| **Runtime.evaluate** | 混合 | Rust CDP + 前端 REPL UI | 2 天 | `execute_code` |
+| **console 分类** | 混合 | Rust 监听 + 前端 UI | 2 天 | `get_console_logs` |
+| **IPC 消息追踪** ⭐ | 混合 | Rust Hook + DevTools Panel | 1 周 | `get_ipc_messages` |
+| **网络请求追踪** | DevTools Frontend | 扩展 Network Panel | 1 周 | `get_network_requests` |
+| **性能分析** | DevTools Frontend | 扩展 Performance Panel | 2 周 | `analyze_performance` |
+
+### IPC 调试非侵入式方案 ⭐ 核心差异化
+
+**技术架构**:
+```
+Debugtron Tauri (启动时)
+  ↓ --require 参数注入
+Hook Script (ipc-hook-{session_id}.js)
+  ↓ Proxy 拦截 ipcMain/ipcRenderer
+IPC Debug WebSocket Server (Rust)
+  ↓ 存储 + 转发
+DevTools IPC Panel (新建面板)
+```
+
+**关键特性**:
+- ✅ **非侵入式**: 通过 `--require` 注入 Hook 脚本，无需修改被调试应用
+- ✅ **完整捕获**: 拦截所有 ipcMain.handle/on 和 ipcRenderer.send/invoke 调用
+- ✅ **实时可视化**: 在 DevTools 新建 IPC Debugger Panel 显示消息流
+- ✅ **性能分析**: 记录每次 IPC 调用的耗时和状态
+
+**实现文件**:
+- `src-tauri/src/ipc_debugger.rs` - IPC WebSocket 服务器
+- `src-tauri/resources/ipc-hook-template.js` - Hook 脚本模板
+- `devtools-frontend/front_end/panels/ipc_debugger/IpcDebuggerPanel.ts` - DevTools 面板
+
+### MCP 架构设计（面向 AI）
+
+**12 个核心 MCP 工具**:
+
+| 工具名称 | 功能 | AI 场景示例 |
+|---------|------|-----------|
+| `list_sessions` | 列出活跃会话 | "显示正在调试的应用" |
+| `search_logs` | 搜索日志 | "查找错误日志" |
+| `export_logs` | 导出日志 | "导出为 JSON" |
+| `export_session` | 导出会话 | "保存调试会话" |
+| `get_ipc_messages` | 获取 IPC 消息 | "显示 IPC 通信" |
+| `analyze_ipc_flow` | 分析 IPC 流 | "检测 IPC 延迟" |
+| `get_network_requests` | 获取网络请求 | "显示失败的 HTTP 请求" |
+| `analyze_performance` | 性能分析 | "检查内存泄漏" |
+
+**技术选型**: JSON-RPC 2.0 (MCP 官方标准)
+
+**实现文件**: `src-tauri/src/mcp_server.rs`
+
+### 12 周实施路线图
+
+#### Week 1-2: MVP v1.1 - 日志和协作增强
+- 日志搜索/导出功能
+- 会话导出/导入
+- 预设启动配置
+
+#### Week 3-5: MVP v1.2 - CDP 基础集成
+- WebSocket CDP 连接
+- Runtime.evaluate + REPL UI
+- console.log 分类
+- 实时性能指标
+
+#### Week 6-9: MVP v1.3 - IPC 调试 + 网络监控 ⭐⭐
+- IPC WebSocket 服务器
+- Hook 脚本注入
+- DevTools IPC Panel
+- 消息流可视化
+- 网络请求追踪
+
+#### Week 10-12: Linux 平台 + MCP 集成
+- Linux 应用发现
+- MCP JSON-RPC 服务器
+- 12 个工具实现
+
+**成功指标**:
+- Week 2: 日志搜索/导出可用，用户满意度 +30%
+- Week 5: CDP 代码执行可用，交互式调试达成
+- Week 9: IPC 调试可用，市场差异化优势建立
+- Week 12: MCP 集成完成，AI 工具可调用
 
 ## 下一步行动
 

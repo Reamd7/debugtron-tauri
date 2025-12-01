@@ -16,6 +16,11 @@
 - `01-cdp-capability-audit.md` - CDP 能力审计报告
 - `02-competitive-analysis.md` - 竞品分析报告
 - `03-workflow-collaboration.md` - 工作流和协作分析
+- `04-architecture-implementation-plan.md` - **功能分层架构与 12 周实施计划** ⭐⭐ 最新！
+  - 核心架构决策（构建系统、功能分层）
+  - IPC 调试非侵入式方案（核心差异化）
+  - MCP 架构设计（面向 AI）
+  - 12 周详细路线图
 
 ## 🎯 核心发现
 
