@@ -2,14 +2,54 @@
 
 > Debug in-production Electron based App - Tauri Edition
 
-A powerful desktop debugging tool for in-production Electron applications, rebuilt with Tauri for better performance and smaller bundle size.
+A powerful desktop debugging tool for in-production Electron applications, rebuilt with Tauri + Rust for better performance, smaller bundle size, and cross-platform support.
 
-## Features
+## 🎉 Project Status
 
-- 🔍 **Automatic App Discovery**: Cross-platform detection of installed Electron applications
-- 🚀 **One-Click Debug Sessions**: Launch any Electron app with debugging flags enabled
-- 🛠️ **DevTools Integration**: Access Chrome DevTools for both Node.js main process and renderer processes
-- 📊 **Real-Time Monitoring**: Live stdout/stderr logging with professional terminal interface
+**Phase 1-8 Complete!** Windows and macOS platform support fully implemented.
+
+### ✅ Current Features
+
+- **Cross-platform Electron App Discovery**
+  - **macOS**: Scans `/Applications` and `~/Applications`, detects Electron Framework, extracts ICNS icons
+  - **Windows**: Scans Program Files directories, detects `resources/app.asar`, extracts PE resource icons
+  - **Linux**: *Planned* (`.desktop` file scanning)
+
+- **One-Click Debug Sessions**
+  - Automatic port allocation using `portpicker`
+  - Support for both `--inspect` (normal) and `--inspect-brk` (start paused) modes
+  - Right-click context menu for advanced debugging options
+
+- **Dual-Mode DevTools Integration**
+  - **Tauri Window Mode**: Open DevTools in integrated Tauri window (1200x800, resizable)
+  - **Browser Mode**: Open DevTools in system default browser for full extension support
+  - Intelligent DevTools frontend selection (`inspector.html` for renderer, `js_app.html` for Node.js)
+
+- **Real-Time Monitoring & Logging**
+  - Live stdout/stderr streaming via Tauri Events
+  - Xterm.js terminal with incremental log appending (optimized performance)
+  - Process exit detection and automatic session cleanup
+
+- **Advanced Features**
+  - Progressive polling strategy (100ms → 3s) for instant debug target discovery
+  - Multi-session debugging with proper tab synchronization
+  - Local DevTools HTTP server using `axum` + `tower-http`
+  - Custom path debugging via drag-and-drop (macOS)
+
+### 🚀 User Workflow
+
+1. **Launch** Debugtron Tauri application
+2. **Discover** View automatically detected Electron apps in your system
+3. **Start Debugging**:
+   - *Left-click* → Normal debug mode (app starts normally)
+   - *Right-click* → Advanced menu:
+     - "Debug" - Normal mode
+     - "Debug with --inspect-brk" - Start paused at first line
+4. **Monitor** View real-time logs in the terminal panel
+5. **Inspect** Open DevTools:
+   - Blue "Inspect" button → Tauri window mode
+   - Green "Open in Browser" button → System browser mode
+6. **Debug** Directly debug the application using Chrome DevTools
 
 ## Development
 
@@ -55,10 +95,24 @@ debugtron-tauri/
 └── claude.md             # Project management
 ```
 
-## Documentation
+## 📚 Documentation
 
-- [Migration Plan](migration_plan.md) - Detailed migration strategy from Electron to Tauri
-- [Project Tasks](claude.md) - Development progress and task management
+This project maintains comprehensive documentation split into focused files:
+
+### Core Documentation
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture, technical stack, and core modules
+- **[DEVELOPMENT_GUIDE.md](DEVELOPMENT_GUIDE.md)** - Development setup, commands, Git workflow
+- **[DECISION_LOG.md](DECISION_LOG.md)** - Technical decision records and implementation details
+- **[RELEASE_PROCESS.md](RELEASE_PROCESS.md)** - Multi-platform build and release process
+- **[TODO.md](TODO.md)** - Pending tasks, feature roadmap, and issue tracking
+
+### Project History
+- **[migration_plan.md](migration_plan.md)** - Original migration strategy from Electron to Tauri
+- **[CLAUDE.md](CLAUDE.md)** - Project management and documentation index
+
+### Feature Documentation
+- **[LOG_FILTER_IMPLEMENTATION.md](LOG_FILTER_IMPLEMENTATION.md)** - Log filtering feature implementation
+- **[LOG_FILTER_TESTING.md](LOG_FILTER_TESTING.md)** - Log filtering testing procedures
 
 ## Acknowledgments
 
