@@ -205,12 +205,22 @@
   - 减少事件发送频率
   - 优化大量日志输出
 
-#### 发版自动化 (Phase 9)
-- [ ] **实现多平台自动发版系统**
-  - 设计 GitHub Actions Workflow
-  - 配置 Self-hosted Runners
-  - 实现 Draft Release 策略
-  - 自动构建和上传产物
+#### 发版自动化 (Phase 9) ✅ 2025-11-29
+- [x] **实现多平台自动发版系统**
+  - ✅ **本地脚本方案**（替代 GitHub Actions）：完全本地控制，无需云服务
+  - ✅ **Draft Release 策略**：使用 GitHub CLI (gh) 创建草稿发布，多平台异步上传
+  - ✅ **版本号自动同步**：自动同步 package.json、Cargo.toml、tauri.conf.json
+  - ✅ **多平台异步构建**：Windows 和 macOS 可在不同机器上异步构建
+  - ✅ **人工确认发布**：提供发布前检查和确认机制
+  - ✅ **完整脚本集**：
+    - `scripts/sync-version.cjs` - 版本号同步
+    - `scripts/release.cjs` - 创建版本和 Git tag
+    - `scripts/build-and-upload.ps1` - Windows 构建上传
+    - `scripts/build-and-upload.sh` - macOS 多架构构建上传（ARM64 + x86_64）
+    - `scripts/publish-release.cjs` - 检查和发布 Release
+    - `scripts/cleanup.ps1/.sh` - 清理工具
+  - ✅ **详细的 README.md**：完整的使用指南和故障排查
+  - ✅ **npm script 集成**：可通过 `npm run release <version>` 和 `npm run publish-release <version>` 调用
 
 ## 关键文档
 
